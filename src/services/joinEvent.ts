@@ -8,7 +8,7 @@ export async function sendWAM(params: FuncReqParams, context: FuncReqContext) {
     type: "wam" as const,
     attributes: {
       appId: channeltalk.appId,
-      name: "manageEvent",
+      name: "joinEvent",
       wamArgs: {
         userId: context.caller.id,
         channelId: context.channel.id,
