@@ -14,6 +14,7 @@ export async function sendWAM(params: CmdReqParams, context: CmdReqContext) {
       wamArgs: {
         userId: context.caller.id,
         channelId: context.channel.id,
+        chatId: params.chat.id,
         events: EventStore.getEvents(),
       },
     },

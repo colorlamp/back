@@ -31,12 +31,10 @@ export interface Command {
 export const cmdReqSchema = z.object({
   method: z.string(),
   params: z.object({
-    chat: z
-      .object({
-        type: z.enum(["group", "userChat", "directChat"]),
-        id: z.string(),
-      })
-      .optional(),
+    chat: z.object({
+      type: z.enum(["group", "userChat", "directChat"]),
+      id: z.string(),
+    }),
     input: z.record(z.any()),
     language: z.string().optional(),
   }),
