@@ -13,19 +13,19 @@ export async function handleAskCommand(params: CmdReqParams, context: CmdReqCont
       question: z.string(),
     })
     .parse(params.input);
-  
+
   await writeUserChatMessage(
     context.channel.id,
     params.chat.id,
     `질문이 등록되었어요! 답변을 기다려주세요.\n\n${question}`
   );
-  
+
   const response = await searchSimilarQuestions(question);
   if (response) {
     await writeUserChatMessage(
       context.channel.id,
       params.chat.id,
-      `기존 답변을 바탕으로 AI가 재구성한 답변이에요:\n\n${question}`
+      `기존 답변을 바탕으로 AI가 재구성한 답변이에요:\n\n${response}`
     );
   } else {
     console.log("질문등록");
@@ -41,12 +41,17 @@ export async function handleAnswerCommand(params: CmdReqParams, context: CmdReqC
       answer: z.string(),
     })
     .parse(params.input);
-
   const lastQuestion = lastQuestions.get(params.chat.id);
   if (!lastQuestion) {
     console.log("질문없어ㅠ");
     return {};
   }
+
+  await writeUserChatMessage(
+    context.channel.id,
+    params.chat.id,
+    `다음 질문에 대한 답변이 등록되었어요! Q: ${lastQuestion}}\n\nA: ${answer}`
+  );
 
   const maskedQuestion = await maskPrivacyInfo(lastQuestion);
   const maskedAnswer = await maskPrivacyInfo(answer);
