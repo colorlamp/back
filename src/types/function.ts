@@ -26,3 +26,14 @@ export const funcReqSchema = z.object({
 export type FuncReq = z.infer<typeof funcReqSchema>;
 export type FuncReqParams = FuncReq["params"];
 export type FuncReqContext = FuncReq["context"];
+
+export type FuncRes =
+  | {
+      result: object | any[];
+    }
+  | {
+      error: {
+        type: string;
+        message: string;
+      };
+    };

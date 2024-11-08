@@ -5,7 +5,7 @@ import { regesterCommand, verifySignature } from "./modules/channeltalk";
 import EventStore from "./modules/stores/event";
 import FormStore from "./modules/stores/form";
 import TokenStore from "./modules/stores/token";
-import { funcReqSchema, type Command } from "./types";
+import { funcReqSchema, type FuncRes, type Command } from "./types";
 
 import * as announcement from "./services/announcement";
 import * as manageEvent from "./services/manageEvent";
@@ -46,19 +46,62 @@ async function startServer() {
 
     const { method, params, context } = funcReqSchema.parse(req.body);
     console.log("INFO::Parsed Request");
-    let rtn = {};
 
-    switch (method) {
-      //announcement
-      case "announcement":
-        rtn = await announcement.sendWAM(params, context);
-      case "manageEvent":
-        rtn = await manageEvent.sendWAM(params, context);
-      case "joinEvent":
-        rtn = await joinEvent.sendWAM(params, context);
+    // Command
+    try {
+      let cmdRes: object | null = null;
+
+      switch (method) {
+        //announcement
+        case "announcement":
+          cmdRes = await announcement.sendWAM(params, context);
+          break;
+        case "manageEvent":
+          cmdRes = await manageEvent.sendWAM(params, context);
+          break;
+        case "joinEvent":
+          cmdRes = await joinEvent.sendWAM(params, context);
+          break;
+      }
+
+      if (cmdRes) {
+        res.json(cmdRes);
+        return;
+      }
+    } catch (err: any) {
+      console.error(err);
+      res.status(500).send("Internal Server Error"); // TODO?: 채널톡에서 권장하는 응답이 있으면 수정 필요
+      return;
     }
 
-    res.json({ result: rtn });
+    // Function
+    try {
+      let funcRes: object | null = null;
+
+      switch (method) {
+        case "getFormAnswers":
+          funcRes = manageEvent.sendFormAnswers(params, context);
+          break;
+      }
+
+      if (funcRes) {
+        res.json({
+          result: funcRes,
+        } satisfies FuncRes);
+        return;
+      }
+    } catch (err: any) {
+      console.error(err);
+      res.json({
+        error: {
+          type: "error",
+          message: err.message,
+        },
+      } satisfies FuncRes);
+      return;
+    }
+
+    res.status(400).send("Bad Request"); // TODO?: 채널톡에서 권장하는 응답이 있으면 수정 필요
   });
 
   app.listen(port, () => {
