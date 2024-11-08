@@ -3,6 +3,7 @@ import type { CmdReqParams, CmdReqContext } from "@/types";
 import { searchSimilarQuestions, maskPrivacyInfo } from "@/modules/chatgpt";
 import { writeUserChatMessage } from "@/modules/channeltalk";
 import QuestionStore from "@/modules/stores/question";
+import { channeltalk } from "@/loadenv";
 
 let lastQuestions = new Map<string, string>();
 
@@ -12,7 +13,13 @@ export async function handleAskCommand(params: CmdReqParams, context: CmdReqCont
       question: z.string(),
     })
     .parse(params.input);
-
+  
+  await writeUserChatMessage(
+    context.channel.id,
+    params.chat.id,
+    `질문이 등록되었어요! 답변을 기다려주세요.\n\n${question}`
+  );
+  
   const response = await searchSimilarQuestions(question);
   if (response) {
     await writeUserChatMessage(
