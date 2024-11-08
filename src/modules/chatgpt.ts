@@ -13,7 +13,7 @@ export async function maskPrivacyInfo(text: string) {
       {
         role: "system",
         content:
-          "너는 CS 응대 봇이야. 사용자가 입력한 텍스트에 개인정보가 포함되어 있을 경우, *으로 모두 마스킹해줘. 그 외에는 입력된 텍스트를 그대로 출력해줘.",
+          "사용자가 입력한 텍스트에 개인정보가 포함되어 있을 경우, *으로 모두 마스킹해줘. 그 외에는 입력된 텍스트를 그대로 출력해줘.",
       },
       {
         role: "user",
