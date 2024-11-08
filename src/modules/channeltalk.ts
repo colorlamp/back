@@ -1,54 +1,64 @@
 import axios from "axios";
+import crypto from "crypto";
 import z from "zod";
 import { channeltalk } from "@/loadenv";
+import TokenStore from "./tokenStore";
 
-export async function requestTokens(channelId?: string) {
-  const body = {
-    method: "issueToken",
-    params: {
-      secret: channeltalk.appSecret,
-      channelId,
-    },
-  };
-  const headers = {
-    "Content-Type": "application/json",
-  };
+import type { Command, FuncReqParams, FuncReqContext } from "@/types";
 
-  const response = await axios.put(channeltalk.appStoreUrl, body, { headers });
+export async function verifySignature(signature: string, body: string) {
+  const key = crypto.createSecretKey(Buffer.from(channeltalk.signingKey, "hex"));
+  const mac = crypto.createHmac("sha256", key);
 
-  const { accessToken, refreshToken, expiresIn } = z
-    .object({
-      accessToken: z.string(),
-      refreshToken: z.string(),
-      expiresIn: z.number(),
-    })
-    .parse(response.data.result);
-  const expiresAt = new Date().getTime() + expiresIn * 1000 - 5000; // 5초 마진
+  mac.update(body, "utf8");
 
-  return {
-    accessToken,
-    refreshToken,
-    expiresAt,
-  };
+  return mac.digest("base64") === signature;
 }
 
-export async function refreshAccessToken(refreshToken: string) {
-  const body = {
-    method: "refreshToken",
-    params: {
-      refreshToken,
-    },
+export async function regesterCommand(command: Command[]) {
+  const params = {
+    appId: channeltalk.appId,
+    commands: command,
   };
-  const headers = {
+
+  console.log("hi");
+
+  return _requestNativeFunction("registerCommands", params);
+}
+
+export async function getChannel(channelId: string) {
+  const params = {
+    channelId,
+  };
+
+  return _requestNativeFunction("getChannel", params);
+}
+
+export async function getUser(userId: string, channelId?: string) {
+  const params = {
+    userId,
+  };
+
+  return _requestNativeFunction("getUser", params, channelId);
+}
+
+async function _requestNativeFunction(method: string, params: any, channelId?: string) {
+  const baseUrl = channeltalk.appStoreUrl;
+
+  const header = {
     "Content-Type": "application/json",
+    "x-access-token": await TokenStore.getAccessToken(channelId),
+  };
+  const data = {
+    method: method,
+    params: params,
   };
 
-  const response = await axios.put(channeltalk.appStoreUrl, body, { headers });
-
-  const accessToken = response.headers["x-access-token"];
-  if (typeof accessToken !== "string") {
-    throw new Error("x-access-token header is missing");
+  if (channelId) {
+    data.params.channelId = channelId;
   }
 
-  return accessToken;
+  const rtn = await axios.put(baseUrl, data, { headers: header });
+
+  return rtn.data.result;
 }

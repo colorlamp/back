@@ -23,4 +23,5 @@ export interface Command {
   autoCompleteFunctionName?: string;
   paramDefinitions: ParamDefinition[];
   enabledByDefault?: boolean;
+  alfMode: "disable";
 }

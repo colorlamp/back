@@ -12,16 +12,17 @@ interface TokenInfo {
 const ACCESS_TOKEN_EXPIRES_IN = (1800 - 5) * 1000; // 30분 - 5초
 
 export default class TokenStore {
-  static #tokens = new Map<string | undefined, TokenInfo>();
+  static #tokens = new Map<string | null, TokenInfo>();
 
   static async getAccessToken(channelId?: string) {
-    const tokenInfo = this.#tokens.get(channelId);
+    const tokenInfo = this.#tokens.get(channelId ?? null);
 
     // 새로운 채널
     if (!tokenInfo) {
+      console.log("INFO::Fetching New Token for new Channel");
       const tokenInfo = await issueTokens(channelId);
 
-      this.#tokens.set(channelId, tokenInfo);
+      this.#tokens.set(channelId ?? null, tokenInfo);
       await this.#saveTokens();
 
       return tokenInfo.accessToken;
@@ -29,9 +30,10 @@ export default class TokenStore {
 
     // 만료된 토큰
     if (Date.now() >= tokenInfo.expireAt) {
+      console.log("INFO::Refreshing Token");
       const newTokenInfo = await refershAccessToken(tokenInfo.refreshToken);
 
-      this.#tokens.set(channelId, {
+      this.#tokens.set(channelId ?? null, {
         ...newTokenInfo,
         refreshToken: tokenInfo.refreshToken,
       });
@@ -60,6 +62,8 @@ export default class TokenStore {
 }
 
 async function issueTokens(channelId?: string) {
+  console.log("issueTokens");
+
   const body = {
     method: "issueToken",
     params: {
@@ -72,6 +76,8 @@ async function issueTokens(channelId?: string) {
   };
 
   const response = await axios.put(channeltalk.appStoreUrl, body, { headers });
+
+  console.log(response.data);
 
   const { accessToken, refreshToken } = z
     .object({
@@ -88,6 +94,8 @@ async function issueTokens(channelId?: string) {
 }
 
 async function refershAccessToken(refreshToken: string) {
+  console.log("refershAccessToken");
+
   const body = {
     method: "refreshToken",
     params: {
@@ -100,8 +108,10 @@ async function refershAccessToken(refreshToken: string) {
 
   const response = await axios.put(channeltalk.appStoreUrl, body, { headers });
 
-  const accessToken = response.headers["x-access-token"];
+  // const accessToken = response.headers["x-access-token"];
+  const accessToken = response.data.result.accessToken;
   if (typeof accessToken !== "string") {
+    console.log(response.data);
     throw new Error("x-access-token header is missing");
   }
 

@@ -12,3 +12,5 @@
 # TypeScript
 /build
 *.tsbuildinfo
+
+tokens.json
