@@ -22,5 +22,5 @@ export interface Command {
   actionFunctionName: string;
   autoCompleteFunctionName?: string;
   paramDefinitions: ParamDefinition[];
-  enabledByDefaul?: boolean;
+  enabledByDefault?: boolean;
 }
