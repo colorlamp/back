@@ -173,7 +173,7 @@ async function registerCommands() {
           name: "イベント管理",
         },
       },
-      actionFunctionName: "makeEvent",
+      actionFunctionName: "manageEvent",
       paramDefinitions: [],
       enabledByDefault: true,
       alfMode: "disable",
