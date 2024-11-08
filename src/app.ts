@@ -4,6 +4,7 @@ import { port, trustProxy } from "./loadenv";
 import { regesterCommand, verifySignature } from "./modules/channeltalk";
 import EventStore from "./modules/stores/event";
 import FormStore from "./modules/stores/form";
+import QuestionStore from "./modules/stores/question";
 import TokenStore from "./modules/stores/token";
 import { cmdReqSchema, funcReqSchema, type CmdResWAM, type Command, type FuncRes } from "./types";
 
@@ -16,6 +17,7 @@ startServer();
 async function startServer() {
   await EventStore.loadEvents(); // events.json 파일이 존재하면 불러옴
   await FormStore.loadForms(); // forms.json 파일이 존재하면 불러옴
+  await QuestionStore.loadQuestions(); // questions.json 파일이 존재하면 불러옴
   await TokenStore.loadTokens(); // tokens.json 파일이 존재하면 불러옴
 
   await TokenStore.getAccessToken(); // 기본 토큰 자동 발급

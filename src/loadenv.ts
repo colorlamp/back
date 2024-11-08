@@ -11,3 +11,7 @@ export const channeltalk = {
   signingKey: process.env.CT_SIGNING_KEY!, // Required
   appStoreUrl: process.env.CT_APPSTORE_URL!, // Required
 };
+
+export const chatgpt = {
+  secret: process.env.GPT_SECRET!, // Required
+};
