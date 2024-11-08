@@ -25,10 +25,11 @@ export async function sendWAM(params: FuncReqParams, context: FuncReqContext) {
 }
 
 export async function receiveFormAnswer(params: FuncReqParams, context: FuncReqContext) {
- 	console.log(JSON.stringify(params));
-	console.log(JSON.stringify(context));
+  console.log("INFO::joinEvent::ASDF");
+  console.log(JSON.stringify(params));
+  console.log(JSON.stringify(context));
 
-       	const { userId, eventId, answer } = z
+  const { userId, eventId, answer } = z
     .object({
       userId: z.string(),
       eventId: z.number(),
