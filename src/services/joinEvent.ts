@@ -65,11 +65,13 @@ export async function sendFormData(params: FuncReqParams, context: FuncReqContex
     .parse(params);
 
   const event = EventStore.getEvent(eventId);
+  console.log("INFO::joinEvent::sendFormData::event", event);
   if (!event) {
     throw new Error("Invalid eventId argument"); // Bad Request
   }
 
   const form = FormStore.getForm(event.formId);
+  console.log("INFO::joinEvent::sendFormData::form", form);
   if (!form) {
     throw new Error("Invalid formId field in event"); // Internal Server Error
   }
