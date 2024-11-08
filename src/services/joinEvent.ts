@@ -55,3 +55,24 @@ export async function receiveFormAnswer(params: FuncReqParams, context: FuncReqC
 
   return {};
 }
+
+export async function sendFormData(params: FuncReqParams, context: FuncReqContext) {
+  console.log("INFO::joinEvent::sendFormData::Request received");
+  const { eventId } = z
+    .object({
+      eventId: z.number(),
+    })
+    .parse(params);
+
+  const event = EventStore.getEvent(eventId);
+  if (!event) {
+    throw new Error("Invalid eventId argument"); // Bad Request
+  }
+
+  const form = FormStore.getForm(event.formId);
+  if (!form) {
+    throw new Error("Invalid formId field in event"); // Internal Server Error
+  }
+
+  return { form };
+}
