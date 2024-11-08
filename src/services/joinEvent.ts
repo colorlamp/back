@@ -2,9 +2,9 @@ import z from "zod";
 import { channeltalk } from "@/loadenv";
 import EventStore from "@/modules/stores/event";
 import FormStore from "@/modules/stores/form";
-import type { FuncReqParams, FuncReqContext } from "@/types";
+import type { FuncReqParams, FuncReqContext, CmdReqParams, CmdReqContext } from "@/types";
 
-export async function sendWAM(params: FuncReqParams, context: FuncReqContext) {
+export async function sendWAM(params: CmdReqParams, context: CmdReqContext) {
   console.log("INFO::joinEvent::Request received");
   const rtn = {
     type: "wam" as const,
@@ -35,7 +35,7 @@ export async function receiveFormAnswer(params: FuncReqParams, context: FuncReqC
       eventId: z.number(),
       answer: z.string(),
     })
-    .parse(params.input);
+    .parse(params);
 
   const event = EventStore.getEvent(eventId);
   if (!event) {

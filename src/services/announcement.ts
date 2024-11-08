@@ -1,7 +1,7 @@
-import type { Command, FuncReqParams, FuncReqContext } from "@/types";
+import type { Command, FuncReqParams, FuncReqContext, CmdReqParams, CmdReqContext } from "@/types";
 import { channeltalk } from "../loadenv";
 
-export async function sendWAM(params: FuncReqParams, context: FuncReqContext) {
+export async function sendWAM(params: CmdReqParams, context: CmdReqContext) {
   console.log("INFO::Announcement::Request received");
   const rtn = {
     type: "wam" as const,

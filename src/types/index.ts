@@ -1,2 +1,2 @@
-export type * from "./command";
+export * from "./command";
 export * from "./function";

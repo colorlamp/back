@@ -5,7 +5,7 @@ import { regesterCommand, verifySignature } from "./modules/channeltalk";
 import EventStore from "./modules/stores/event";
 import FormStore from "./modules/stores/form";
 import TokenStore from "./modules/stores/token";
-import { funcReqSchema, type FuncRes, type Command, type CommandWAMRes } from "./types";
+import { cmdReqSchema, funcReqSchema, type CmdResWAM, type Command, type FuncRes } from "./types";
 
 import * as announcement from "./services/announcement";
 import * as manageEvent from "./services/manageEvent";
@@ -43,15 +43,14 @@ async function startServer() {
       return;
     }
 
-    const { method, params, context } = funcReqSchema.parse(req.body);
-    console.log("INFO::Parsed Request");
+    const cmdReq = cmdReqSchema.safeParse(req.body);
+    if (cmdReq.success) {
+      const { method, params, context } = cmdReq.data;
+      console.log("INFO::Command::Parsed Callback");
 
-    // Command
-    try {
-      let cmdRes: CommandWAMRes | null = null;
+      let cmdRes: CmdResWAM | null = null;
 
       switch (method) {
-        //announcement
         case "announcement":
           cmdRes = await announcement.sendWAM(params, context);
           break;
@@ -64,17 +63,25 @@ async function startServer() {
       }
 
       if (cmdRes) {
-        res.json({ result: cmdRes } satisfies FuncRes);
-        return;
+        res.json({
+          result: cmdRes,
+        } satisfies FuncRes); // Command도 Function이다..
+      } else {
+        res.json({
+          error: {
+            type: "error",
+            message: "Bad Request",
+          },
+        } satisfies FuncRes);
       }
-    } catch (err: any) {
-      console.error(err);
-      res.status(500).send("Internal Server Error"); // TODO?: 채널톡에서 권장하는 응답이 있으면 수정 필요
       return;
     }
 
-    // Function
-    try {
+    const funcReq = funcReqSchema.safeParse(req.body);
+    if (funcReq.success) {
+      const { method, params, context } = funcReq.data;
+      console.log("INFO::Function::Parsed Callback");
+
       let funcRes: object | null = null;
 
       switch (method) {
@@ -90,20 +97,23 @@ async function startServer() {
         res.json({
           result: funcRes,
         } satisfies FuncRes);
-        return;
+      } else {
+        res.json({
+          error: {
+            type: "error",
+            message: "Bad Request",
+          },
+        } satisfies FuncRes);
       }
-    } catch (err: any) {
-      console.error(err);
-      res.json({
-        error: {
-          type: "error",
-          message: err.message,
-        },
-      } satisfies FuncRes);
       return;
     }
 
-    res.status(400).send("Bad Request"); // TODO?: 채널톡에서 권장하는 응답이 있으면 수정 필요
+    res.json({
+      error: {
+        type: "error",
+        message: "Bad Request",
+      },
+    } satisfies FuncRes);
   });
 
   app.listen(port, () => {

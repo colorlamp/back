@@ -1,3 +1,5 @@
+import z from "zod";
+
 type DescI18nMap = Record<string, { name: string; description: string }>;
 
 interface ParamDefinition {
@@ -26,7 +28,34 @@ export interface Command {
   alfMode: "disable";
 }
 
-export interface CommandWAMRes {
+export const cmdReqSchema = z.object({
+  method: z.string(),
+  params: z.object({
+    chat: z
+      .object({
+        type: z.enum(["group", "userChat", "directChat"]),
+        id: z.string(),
+      })
+      .optional(),
+    input: z.record(z.any()),
+    language: z.string().optional(),
+  }),
+  context: z.object({
+    channel: z.object({
+      id: z.string(),
+    }),
+    caller: z.object({
+      type: z.string(),
+      id: z.string().optional(),
+    }),
+  }),
+});
+
+export type CmdReq = z.infer<typeof cmdReqSchema>;
+export type CmdReqParams = CmdReq["params"];
+export type CmdReqContext = CmdReq["context"];
+
+export interface CmdResWAM {
   type: "wam";
   attributes: {
     appId: string;
