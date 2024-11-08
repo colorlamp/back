@@ -22,7 +22,7 @@ export default class EventStore {
     return this.#events.find((event) => event.id === id);
   }
 
-  static async addEvent(eventInfo: Exclude<EventInfo, "id">) {
+  static async addEvent(eventInfo: Omit<EventInfo, "id" | "userChatIds">) {
     this.#events.push({
       ...eventInfo,
       id: this.#counter++,

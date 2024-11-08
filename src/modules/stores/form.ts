@@ -30,13 +30,14 @@ export default class FormStore {
     await this.#saveForms();
   }
 
-  static async addForm(formInfo: Exclude<FormInfo, "id" | "answers">) {
+  static async addForm(formInfo: Omit<FormInfo, "id" | "answers">) {
     this.#forms.push({
       ...formInfo,
       id: this.#counter++,
       answers: [],
     });
     await this.#saveForms();
+    return this.#counter - 1;
   }
 
   static async loadForms() {

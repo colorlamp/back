@@ -48,6 +48,27 @@ export function sendFormAnswers(params: FuncReqParams, context: FuncReqContext) 
   return { answers: form.answers };
 }
 
+export async function createNewEvent(params: FuncReqParams, context: FuncReqContext) {
+  console.log("INFO::manageEvent::createNewEvent::Request received");
+  // This will get event and form data
+  const { name, description, form } = z
+    .object({
+      name: z.string(),
+      description: z.string(),
+      form: z.string(),
+    })
+    .parse(params);
+
+  const startAt = Date.now();
+  const endAt = startAt + 1000 * 60 * 60 * 24 * 7; // 7 days later
+  const formId = await FormStore.addForm({ content: form });
+
+  EventStore.addEvent({ name, description, startAt, endAt, formId });
+  console.log("INFO::manageEvent::createNewEvent::Request processed");
+
+  return {};
+}
+
 export function sendEventChatIds(params: FuncReqParams, context: FuncReqContext) {
   const { eventId } = z
     .object({
