@@ -21,6 +21,7 @@ export async function writeUserChatMessage(channelId: string, userChatId: string
     userChatId,
     dto: {
       plainText: message,
+      botName: "UMS for U"
     }
   }
 
@@ -73,6 +74,8 @@ async function _requestNativeFunction(method: string, params: any, channelId?: s
   }
 
   const rtn = await axios.put(baseUrl, data, { headers: header });
+
+  console.log("DEBUG::requestNativeFunction::response", rtn.status, rtn.data);
 
   return rtn.data.result;
 }
