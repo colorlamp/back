@@ -118,6 +118,9 @@ async function startServer() {
           console.log("DEBUG::Function::Response");
           console.log(JSON.stringify(funcRes));
           break;
+        case "getFormData":
+          funcRes = joinEvent.sendFormData(params, context);
+          break;
       }
 
       if (funcRes) {
