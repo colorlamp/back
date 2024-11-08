@@ -27,7 +27,7 @@ export async function writeUserChatMessage(channelId: string, userChatId: string
 
   console.log("DEBUG::writeUserChatMessage::params", params);
 
-  return _requestNativeFunction("writeUserChatMessage", params);
+  return _requestNativeFunction("writeUserChatMessage", params, channelId);
 }
 
 export async function regesterCommand(command: Command[]) {
