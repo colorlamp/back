@@ -115,6 +115,8 @@ async function startServer() {
           break;
         case "getFormFields":
           funcRes = joinEvent.sendFormData(params, context);
+          console.log("DEBUG::Function::Response");
+          console.log(JSON.stringify(funcRes));
           break;
       }
 
