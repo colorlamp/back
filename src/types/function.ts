@@ -8,7 +8,7 @@ export const funcReqSchema = z.object({
       id: z.string(),
     }),
     caller: z.object({
-      type: z.enum(["app", "user", "mananger"]),
+      type: z.enum(["app", "user", "manager"]),
       id: z.string().optional(),
     }),
   }),

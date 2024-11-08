@@ -43,9 +43,11 @@ async function startServer() {
       res.status(401).send("Unauthorized");
       return;
     }
+    console.log("INFO::Verified Signature");
 
     const cmdReq = cmdReqSchema.safeParse(req.body);
     if (cmdReq.success) {
+      console.log("INFO::Command::Parsed Callback");
       const { method, params, context } = cmdReq.data;
       console.log("INFO::Command::Parsed Callback");
 
