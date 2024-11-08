@@ -76,5 +76,6 @@ export async function sendFormData(params: FuncReqParams, context: FuncReqContex
     throw new Error("Invalid formId field in event"); // Internal Server Error
   }
 
+  console.log("INFO::joinEvent::sendFormData::Request processed");
   return { form };
 }
