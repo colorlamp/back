@@ -92,7 +92,7 @@ async function startServer() {
         case "submitFormAnswer":
           funcRes = joinEvent.receiveFormAnswer(params, context);
           break;
-        case "sendEventChatIds":
+        case "getEventChatIds":
           funcRes = manageEvent.sendEventChatIds(params, context);
           break;
       }
