@@ -2,7 +2,7 @@ import axios from "axios";
 import crypto from "crypto";
 import z from "zod";
 import { channeltalk } from "@/loadenv";
-import TokenStore from "./tokenStore";
+import TokenStore from "./stores/token";
 
 import type { Command, FuncReqParams, FuncReqContext } from "@/types";
 

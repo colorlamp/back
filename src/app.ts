@@ -2,7 +2,9 @@ import express from "express";
 
 import { port, trustProxy } from "./loadenv";
 import { regesterCommand, verifySignature } from "./modules/channeltalk";
-import TokenStore from "./modules/tokenStore";
+import EventStore from "./modules/stores/event";
+import FormStore from "./modules/stores/form";
+import TokenStore from "./modules/stores/token";
 import { funcReqSchema, type Command } from "./types";
 
 import * as announcement from "./services/announcement";
@@ -12,9 +14,11 @@ import * as joinEvent from "./services/joinEvent";
 startServer();
 
 async function startServer() {
+  await EventStore.loadEvents(); // events.json 파일이 존재하면 불러옴
+  await FormStore.loadForms(); // forms.json 파일이 존재하면 불러옴
   await TokenStore.loadTokens(); // tokens.json 파일이 존재하면 불러옴
-  await TokenStore.getAccessToken(); // 기본 토큰 자동 발급
 
+  await TokenStore.getAccessToken(); // 기본 토큰 자동 발급
   await registerCommands(); // 커맨드 등록
 
   const app = express();
