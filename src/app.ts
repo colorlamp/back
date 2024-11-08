@@ -46,9 +46,11 @@ async function startServer() {
       res.status(401).send("Unauthorized");
       return;
     }
+    console.log("INFO::Verified Signature");
 
     const cmdReq = cmdReqSchema.safeParse(req.body);
     if (cmdReq.success) {
+      console.log("INFO::Command::Parsed Callback");
       const { method, params, context } = cmdReq.data;
       console.log("INFO::Command::Parsed Callback");
 
@@ -74,7 +76,7 @@ async function startServer() {
 
       if (cmdRes) {
         console.log("DEBUG::Command::Response");
-        console.log(cmdRes);
+        console.log(JSON.stringify(cmdRes));
         res.json({
           result: cmdRes,
         } satisfies FuncRes); // Command도 Function이다..
@@ -93,6 +95,8 @@ async function startServer() {
     if (funcReq.success) {
       const { method, params, context } = funcReq.data;
       console.log("INFO::Function::Parsed Callback");
+      console.log("DEBUG::Function::Request params");
+      // console.log(JSON.stringify(params));
 
       let funcRes: object | null = null;
 
@@ -110,7 +114,7 @@ async function startServer() {
 
       if (funcRes) {
         console.log("DEBUG::Function::Response");
-        console.log(funcRes);
+        console.log(JSON.stringify(funcRes));
         res.json({
           result: funcRes,
         } satisfies FuncRes);
@@ -182,7 +186,7 @@ async function registerCommands() {
           name: "イベント管理",
         },
       },
-      actionFunctionName: "makeEvent",
+      actionFunctionName: "manageEvent",
       paramDefinitions: [],
       enabledByDefault: true,
       alfMode: "disable",

@@ -25,6 +25,7 @@ export async function sendWAM(params: CmdReqParams, context: CmdReqContext) {
 }
 
 export function sendFormAnswers(params: FuncReqParams, context: FuncReqContext) {
+  console.log("INFO::manageEvent::sendFormAnswers::Request received");
   const { eventId } = z
     .object({
       eventId: z.number(),
@@ -32,15 +33,18 @@ export function sendFormAnswers(params: FuncReqParams, context: FuncReqContext) 
     .parse(params);
 
   const event = EventStore.getEvent(eventId);
+  console.log("INFO::manageEvent::sendFormAnswers::event", event);
   if (!event) {
     throw new Error("Invalid eventId argument"); // Bad Request
   }
 
   const form = FormStore.getForm(event.formId);
+  console.log("INFO::manageEvent::sendFormAnswers::form", form);
   if (!form) {
     throw new Error("Invalid formId field in event"); // Internal Server Error
   }
 
+  console.log("INFO::manageEvent::sendFormAnswers::Request processed");
   return { answers: form.answers };
 }
 
