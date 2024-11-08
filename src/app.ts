@@ -245,7 +245,7 @@ async function registerCommands() {
     },
     {
       name: "answer",
-      scope: "front",
+      scope: "desk",
       description: "Answer to the last question",
       nameDescI18nMap: {
         en: {
