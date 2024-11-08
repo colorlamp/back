@@ -26,7 +26,7 @@ export async function sendWAM(params: CmdReqParams, context: CmdReqContext) {
 }
 
 export async function receiveFormAnswer(params: FuncReqParams, context: FuncReqContext) {
-  console.log("INFO::joinEvent::ASDF");
+  console.log("INFO::joinEvent::receiveFormAnswer::Request received");
   console.log(JSON.stringify(params));
   console.log(JSON.stringify(context));
 

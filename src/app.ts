@@ -84,6 +84,8 @@ async function startServer() {
     if (funcReq.success) {
       const { method, params, context } = funcReq.data;
       console.log("INFO::Function::Parsed Callback");
+      console.log("DEBUG::Function::Request params");
+      console.log(JSON.stringify(params));
 
       let funcRes: object | null = null;
 
