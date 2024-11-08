@@ -2,7 +2,7 @@ import z from "zod";
 
 export const funcReqSchema = z.object({
   method: z.string(),
-  params: z.object({}),
+  params: z.object({}).passthrough(),
   context: z.object({
     channel: z.object({
       id: z.string(),
