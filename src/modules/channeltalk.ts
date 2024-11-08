@@ -15,6 +15,18 @@ export async function verifySignature(signature: string, body: string) {
   return mac.digest("base64") === signature;
 }
 
+export async function writeUserChatMessage(channelId: string, userChatId: string, message: string) {
+  const params = {
+    channelId,
+    userChatId,
+    dto: {
+      plainText: message,
+    }
+  }
+
+  return _requestNativeFunction("writeUserChatMessage", params);
+}
+
 export async function regesterCommand(command: Command[]) {
   const params = {
     appId: channeltalk.appId,
