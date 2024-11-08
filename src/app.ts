@@ -11,6 +11,7 @@ import { cmdReqSchema, funcReqSchema, type CmdResWAM, type Command, type FuncRes
 import * as announcement from "./services/announcement";
 import * as manageEvent from "./services/manageEvent";
 import * as joinEvent from "./services/joinEvent";
+import * as question from "./services/question";
 
 startServer();
 
@@ -51,7 +52,7 @@ async function startServer() {
       const { method, params, context } = cmdReq.data;
       console.log("INFO::Command::Parsed Callback");
 
-      let cmdRes: CmdResWAM | null = null;
+      let cmdRes: {} | CmdResWAM | null = null;
 
       switch (method) {
         case "announcement":
@@ -62,6 +63,12 @@ async function startServer() {
           break;
         case "joinEvent":
           cmdRes = await joinEvent.sendWAM(params, context);
+          break;
+        case "ask":
+          cmdRes = await question.handleAskCommand(params, context);
+          break;
+        case "answer":
+          cmdRes = await question.handleAnswerCommand(params, context);
           break;
       }
 
@@ -201,6 +208,64 @@ async function registerCommands() {
       actionFunctionName: "joinEvent",
       paramDefinitions: [],
       enabledByDefault: true,
+      alfMode: "disable",
+    },
+    {
+      name: "ask",
+      scope: "front",
+      description: "Ask a question",
+      nameDescI18nMap: {
+        en: {
+          description: "Ask a question",
+          name: "ask",
+        },
+        ko: {
+          description: "질문을 합니다.",
+          name: "질문",
+        },
+        ja: {
+          description: "質問します。",
+          name: "質問",
+        },
+      },
+      actionFunctionName: "ask",
+      paramDefinitions: [
+        {
+          name: "question",
+          type: "string",
+          required: true,
+          description: "The question to ask",
+        },
+      ],
+      alfMode: "disable",
+    },
+    {
+      name: "answer",
+      scope: "front",
+      description: "Answer to the last question",
+      nameDescI18nMap: {
+        en: {
+          description: "Answer to the last question",
+          name: "answer",
+        },
+        ko: {
+          description: "마지막 질문에 답변합니다.",
+          name: "답변",
+        },
+        ja: {
+          description: "最後の質問に答えます。",
+          name: "回答",
+        },
+      },
+      actionFunctionName: "answer",
+      paramDefinitions: [
+        {
+          name: "answer",
+          type: "string",
+          required: true,
+          description: "The answer to the last question",
+        },
+      ],
       alfMode: "disable",
     },
   ] satisfies Command[];
