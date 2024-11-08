@@ -65,7 +65,7 @@ async function startServer() {
       }
 
       if (cmdRes) {
-        res.json(cmdRes);
+        res.json({ result: cmdRes } satisfies FuncRes);
         return;
       }
     } catch (err: any) {
