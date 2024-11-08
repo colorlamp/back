@@ -15,7 +15,7 @@
     "strict": true,
     "target": "ES6"
   },
-  "include": ["src", "scripts"],
+  "include": ["src"],
   "exclude": ["build", "node_modules"],
   "ts-node": {
     "files": true
