@@ -64,6 +64,8 @@ async function startServer() {
       }
 
       if (cmdRes) {
+        console.log("DEBUG::Command::Response");
+        console.log(cmdRes);
         res.json({
           result: cmdRes,
         } satisfies FuncRes); // Command도 Function이다..
@@ -98,6 +100,8 @@ async function startServer() {
       }
 
       if (funcRes) {
+        console.log("DEBUG::Function::Response");
+        console.log(funcRes);
         res.json({
           result: funcRes,
         } satisfies FuncRes);
