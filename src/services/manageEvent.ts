@@ -1,7 +1,7 @@
 import type { Command, FuncReqParams, FuncReqContext } from "@/types";
 import { channeltalk } from "../loadenv";
 
-export default async function manageEvent(params: FuncReqParams, context: FuncReqContext) {
+export async function sendWAM(params: FuncReqParams, context: FuncReqContext) {
   console.log("INFO::manageEvent::Request received");
   const rtn = {
     type: "wam",

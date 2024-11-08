@@ -5,9 +5,9 @@ import { regesterCommand, verifySignature } from "./modules/channeltalk";
 import TokenStore from "./modules/tokenStore";
 import { funcReqSchema, type Command } from "./types";
 
-import announcement from "./services/announcement";
-import manageEvent from "./services/manageEvent";
-import joinEvent from "./services/joinEvent";
+import * as announcement from "./services/announcement";
+import * as manageEvent from "./services/manageEvent";
+import * as joinEvent from "./services/joinEvent";
 
 startServer();
 
@@ -47,11 +47,11 @@ async function startServer() {
     switch (method) {
       //announcement
       case "announcement":
-        rtn = await announcement(params, context);
+        rtn = await announcement.sendWAM(params, context);
       case "manageEvent":
-        rtn = await manageEvent(params, context);
+        rtn = await manageEvent.sendWAM(params, context);
       case "joinEvent":
-        rtn = await joinEvent(params, context);
+        rtn = await joinEvent.sendWAM(params, context);
     }
 
     res.json({ result: rtn });
