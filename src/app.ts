@@ -105,16 +105,16 @@ async function startServer() {
           funcRes = manageEvent.sendFormAnswers(params, context);
           break;
         case "submitFormAnswer":
-          funcRes = joinEvent.receiveFormAnswer(params, context);
+          funcRes = await joinEvent.receiveFormAnswer(params, context);
           break;
         case "getEventChatIds":
           funcRes = manageEvent.sendEventChatIds(params, context);
           break;
         case "createNewEventSPARCS":
-          funcRes = manageEvent.createNewEvent(params, context);
+          funcRes = await manageEvent.createNewEvent(params, context);
           break;
         case "getFormFields":
-          funcRes = joinEvent.sendFormData(params, context);
+          funcRes = await joinEvent.sendFormData(params, context);
           console.log("DEBUG::Function::Response");
           console.log(JSON.stringify(funcRes));
           break;
