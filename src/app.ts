@@ -110,7 +110,7 @@ async function startServer() {
         case "getEventChatIds":
           funcRes = manageEvent.sendEventChatIds(params, context);
           break;
-        case "createNewEvent":
+        case "createNewEventSPARCS":
           funcRes = manageEvent.createNewEvent(params, context);
           break;
         case "getFormData":
