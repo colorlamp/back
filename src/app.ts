@@ -113,7 +113,7 @@ async function startServer() {
         case "createNewEventSPARCS":
           funcRes = manageEvent.createNewEvent(params, context);
           break;
-        case "getFormData":
+        case "getFormFields":
           funcRes = joinEvent.sendFormData(params, context);
           break;
       }
