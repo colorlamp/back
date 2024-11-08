@@ -6,6 +6,8 @@ import TokenStore from "./modules/tokenStore";
 import { funcReqSchema, type Command } from "./types";
 
 import announcement from "./services/announcement";
+import manageEvent from "./services/manageEvent";
+import joinEvent from "./services/joinEvent";
 
 startServer();
 
@@ -40,14 +42,19 @@ async function startServer() {
 
     const { method, params, context } = funcReqSchema.parse(req.body);
     console.log("INFO::Parsed Request");
+    let rtn = {};
 
     switch (method) {
       //announcement
       case "announcement":
-        res.json({
-          result: await announcement(params, context),
-        });
+        rtn = await announcement(params, context);
+      case "manageEvent":
+        rtn = await manageEvent(params, context);
+      case "joinEvent":
+        rtn = await joinEvent(params, context);
     }
+
+    res.json({ result: rtn });
   });
 
   app.listen(port, () => {
