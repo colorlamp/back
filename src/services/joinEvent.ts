@@ -77,5 +77,6 @@ export async function sendFormData(params: FuncReqParams, context: FuncReqContex
   }
 
   console.log("INFO::joinEvent::sendFormData::Request processed");
+  console.log("DEBUG::joinEvent::sendFormData::form", form);
   return { form };
 }
