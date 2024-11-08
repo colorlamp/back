@@ -23,6 +23,13 @@ export default class FormStore {
     return this.#forms.find((form) => form.id === id);
   }
 
+  static async addAnswer(formId: number, answer: FormAnswer) {
+    const form = this.getForm(formId)!;
+
+    form.answers.push(answer);
+    await this.#saveForms();
+  }
+
   static async addForm(formInfo: Exclude<FormInfo, "id" | "answers">) {
     this.#forms.push({
       ...formInfo,

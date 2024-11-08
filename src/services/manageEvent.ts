@@ -33,12 +33,12 @@ export function sendFormAnswers(params: FuncReqParams, context: FuncReqContext) 
 
   const event = EventStore.getEvent(eventId);
   if (!event) {
-    throw new Error("Invalid eventId argument");
+    throw new Error("Invalid eventId argument"); // Bad Request
   }
 
   const form = FormStore.getForm(event.formId);
   if (!form) {
-    throw new Error("Invalid formId field in event");
+    throw new Error("Invalid formId field in event"); // Internal Server Error
   }
 
   return { answers: form.answers };

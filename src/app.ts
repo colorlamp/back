@@ -82,6 +82,9 @@ async function startServer() {
         case "getFormAnswers":
           funcRes = manageEvent.sendFormAnswers(params, context);
           break;
+        case "submitFormAnswer":
+          funcRes = joinEvent.receiveFormAnswer(params, context);
+          break;
       }
 
       if (funcRes) {
