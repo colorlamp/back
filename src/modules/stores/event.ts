@@ -7,6 +7,7 @@ interface EventInfo {
   startAt: number;
   endAt: number;
   formId: number;
+  userChatIds: string[];
 }
 
 export default class EventStore {
@@ -25,8 +26,22 @@ export default class EventStore {
     this.#events.push({
       ...eventInfo,
       id: this.#counter++,
+      userChatIds: [],
     });
     await this.#saveEvents();
+  }
+
+  static async addUserChatId(eventId: number, chatId: string) {
+    const event = this.getEvent(eventId)!;
+
+    event.userChatIds.push(chatId);
+    await this.#saveEvents();
+  }
+
+  static async getChatIdsbyEventId(eventId: number) {
+    const event = this.getEvent(eventId)!;
+
+    return event.userChatIds;
   }
 
   static async loadEvents() {

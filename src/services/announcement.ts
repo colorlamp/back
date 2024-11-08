@@ -20,23 +20,3 @@ export async function sendWAM(params: CmdReqParams, context: CmdReqContext) {
 
   return rtn;
 }
-
-export async function sendMsg(params: FuncReqParams, context: FuncReqContext) {
-  console.log("INFO::sendMsg::Request received");
-  const rtn = {
-    type: "wam",
-    attributes: {
-      appId: channeltalk.appId,
-      name: "sendMsg",
-      wamArgs: {
-        managerId: context.caller.id,
-        channelId: context.channel.id,
-        events: [],
-      },
-    },
-  };
-
-  console.log("INFO::sendMsg::Request processed");
-
-  return rtn;
-}

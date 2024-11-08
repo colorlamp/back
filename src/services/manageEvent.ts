@@ -43,3 +43,18 @@ export function sendFormAnswers(params: FuncReqParams, context: FuncReqContext) 
 
   return { answers: form.answers };
 }
+
+export function sendEventChatIds(params: FuncReqParams, context: FuncReqContext) {
+  const { eventId } = z
+    .object({
+      eventId: z.number(),
+    })
+    .parse(params);
+
+  const chatIds = EventStore.getChatIdsbyEventId(eventId);
+  if (!chatIds) {
+    throw new Error("Invalid eventId argument"); // Bad Request
+  }
+
+  return { chatIds };
+}
