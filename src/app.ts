@@ -35,7 +35,6 @@ async function startServer() {
   // 라우터
   app.put("/callback", async function (req, res) {
     console.log("INFO::Received Callback");
-    console.log(req.body);
     if (
       typeof req.headers["x-signature"] !== "string" ||
       !verifySignature(req.headers["x-signature"], JSON.stringify(req.body))
