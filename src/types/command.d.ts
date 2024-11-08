@@ -25,3 +25,12 @@ export interface Command {
   enabledByDefault?: boolean;
   alfMode: "disable";
 }
+
+export interface CommandWAMRes {
+  type: "wam";
+  attributes: {
+    appId: string;
+    name: string;
+    wamArgs: object;
+  };
+}

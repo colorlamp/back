@@ -7,7 +7,7 @@ import type { FuncReqParams, FuncReqContext } from "@/types";
 export async function sendWAM(params: FuncReqParams, context: FuncReqContext) {
   console.log("INFO::manageEvent::Request received");
   const rtn = {
-    type: "wam",
+    type: "wam" as const,
     attributes: {
       appId: channeltalk.appId,
       name: "manageEvent",

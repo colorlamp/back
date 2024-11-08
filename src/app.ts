@@ -5,7 +5,7 @@ import { regesterCommand, verifySignature } from "./modules/channeltalk";
 import EventStore from "./modules/stores/event";
 import FormStore from "./modules/stores/form";
 import TokenStore from "./modules/stores/token";
-import { funcReqSchema, type FuncRes, type Command } from "./types";
+import { funcReqSchema, type FuncRes, type Command, type CommandWAMRes } from "./types";
 
 import * as announcement from "./services/announcement";
 import * as manageEvent from "./services/manageEvent";
@@ -49,7 +49,7 @@ async function startServer() {
 
     // Command
     try {
-      let cmdRes: object | null = null;
+      let cmdRes: CommandWAMRes | null = null;
 
       switch (method) {
         //announcement

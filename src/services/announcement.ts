@@ -4,7 +4,7 @@ import { channeltalk } from "../loadenv";
 export async function sendWAM(params: FuncReqParams, context: FuncReqContext) {
   console.log("INFO::Announcement::Request received");
   const rtn = {
-    type: "wam",
+    type: "wam" as const,
     attributes: {
       appId: channeltalk.appId,
       name: "announcement",
