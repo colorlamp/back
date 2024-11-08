@@ -48,19 +48,20 @@ export function sendFormAnswers(params: FuncReqParams, context: FuncReqContext) 
   return { answers: form.answers };
 }
 
-export function createNewEvent(params: FuncReqParams, context: FuncReqContext) {
+export async function createNewEvent(params: FuncReqParams, context: FuncReqContext) {
   console.log("INFO::manageEvent::createNewEvent::Request received");
   // This will get event and form data
-  const { name, description, formId } = z
+  const { name, description, form } = z
     .object({
       name: z.string(),
       description: z.string(),
-      formId: z.number(),
+      form: z.string(),
     })
     .parse(params);
 
   const startAt = Date.now();
   const endAt = startAt + 1000 * 60 * 60 * 24 * 7; // 7 days later
+  const formId = await FormStore.addForm({ content: form });
 
   EventStore.addEvent({ name, description, startAt, endAt, formId });
   console.log("INFO::manageEvent::createNewEvent::Request processed");
